@@ -1,0 +1,13 @@
+amazon.com	//*[@id="productDetails_detailBullets_sections1"]
+amazon.com	//*[@id="price"]/table
+walmart.com	//*[starts-with(@id, "Collapsable")]/div/div/table
+www.amazon.fr	//*[@id="prodDetails"]/div/div[1]/div/div[2]/div/div/table
+www.amazon.fr	//*[@id="prodDetails"]/div[2]/div[2]/div[1]/div[2]/div/div/table
+www.amazon.in	//*[@id="prodDetails"]/div/div[1]/div/div[2]/div/div/table
+www.amazon.in	//*[@id="prodDetails"]/div/div[2]/div[1]/div[2]/div/div/table
+www.amazon.co.uk	//*[@id="detail_bullets_id"]/table
+www.ebay.ie	//*[@id="vi-desc-maincntr"]/div[3]/div/table
+www.ebay.ie	//*[@id="vi-desc-maincntr"]/div[4]/div/table
+www.ebay.ie	//*[@id="vi-desc-maincntr"]/div[5]/div/table
+www.amazon.co.uk	//*[@id="price"]/table
+www.submarino.com.br	//*[@id="content"]/main/div[1]/div/div/div/div[3]/section[2]/div/table
