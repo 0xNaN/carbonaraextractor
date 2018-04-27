@@ -1,4 +1,5 @@
 import nltk
+import re
 import lxml.html as lx
 
 def count_xpath(node, xpath):
@@ -9,8 +10,7 @@ def count_stem(node, stems, sep=" "):
     num_found = 0
 
     #TODO: maybe we have to delete symbols
-    for word in node.text_content().split(sep):
-        word = word.strip()
+    for word in node_words(node):
         stem = porter.stem(word)
         if stem in stems:
             num_found += 1
@@ -32,3 +32,8 @@ def count_between(start_node, stop_node):
         start_node = start_node.getparent()
         parents += 1
     return parents
+
+def node_words(node):
+    text = " ".join(node.itertext())
+    text = re.sub(r"[^a-z0-9]", " ", text, flags=re.IGNORECASE)
+    return re.split(r'\W+', text)

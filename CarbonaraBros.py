@@ -4,6 +4,7 @@ import lxml.html as lx
 import nltk
 import re
 
+import DomUtils
 import DefaultFeatures
 from FeaturesExtractor import *
 from Classifier import *
@@ -24,10 +25,8 @@ def domFromUrl(url, dump_on=""):
     return lx.fromstring(r.text)
 
 def node_text_summary(node, chars=None):
-    text = node.text_content()
-    text = text.strip()
-    text = re.sub(r'\s+', " ", text)
-
+    words = DomUtils.node_words(node)
+    text = " ".join(words)
     if type(chars) == int:
         return text[:chars]
     return text
