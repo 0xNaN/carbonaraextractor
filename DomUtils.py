@@ -1,4 +1,5 @@
 import nltk
+import requests
 import re
 import lxml.html as lx
 
@@ -37,3 +38,16 @@ def node_words(node):
     text = " ".join(node.itertext())
     text = re.sub(r"[^a-z0-9]", " ", text, flags=re.IGNORECASE)
     return re.split(r'\W+', text)
+
+def domFromUrl(url, dump_on=""):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'
+    }
+
+    r = requests.get(url, headers=headers)
+
+    if dump_on != "":
+        with open(dump_on, "w") as d:
+            d.write(r.text)
+
+    return lx.fromstring(r.text)

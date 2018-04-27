@@ -1,55 +1,33 @@
-import sys
-import requests
-import lxml.html as lx
-import nltk
-import re
-
 import DomUtils
 import DefaultFeatures
 from FeaturesExtractor import *
 from Classifier import *
 
+class CarbonaraBros():
 
+    def __init__(self, relevant_threshold = 0.8):
+        self.fe = FeaturesExtractor()
+        self.relevant_threshold = relevant_threshold
+        self.tableClassifier =  Classifier('models/table_classifier.h5')
 
-def domFromUrl(url, dump_on=""):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'
-    }
+    def processDom(self, dom):
+        analysis = {
+            'table': {
+                'relevant': [],
+                'not_relevant': []
+            }
+        }
 
-    r = requests.get(url, headers=headers)
+        # table
+        for table in dom.xpath("//table"):
+            features = self.fe.extract(table, selected = DefaultFeatures.table_selected,
+                                              features_descriptor = DefaultFeatures.table)
+            score = self.tableClassifier.classify(features)
+            score = score[0]
 
-    if dump_on != "":
-        with open(dump_on, "w") as d:
-            d.write(r.text)
+            if score >= self.relevant_threshold:
+                analysis['table']['relevant'].append((score, table))
+            else:
+                analysis['table']['not_relevant'].append((score, table))
 
-    return lx.fromstring(r.text)
-
-def node_text_summary(node, chars=None):
-    words = DomUtils.node_words(node)
-    text = " ".join(words)
-    if type(chars) == int:
-        return text[:chars]
-    return text
-
-if __name__ == '__main__':
-    print()
-    fe = FeaturesExtractor()
-
-    url = sys.argv[1]
-    dom = domFromUrl(url, dump_on="working.html")
-
-    # table
-    tableClassifier = Classifier('models/table_classifier.h5')
-
-    for table in dom.xpath("//table"):
-        features = fe.extract(table, selected = DefaultFeatures.table_selected,
-                                     features_descriptor = DefaultFeatures.table)
-        r = tableClassifier.classify(features)
-
-        if (r[0] >= 0.8):
-            print(">> relevant found {}".format(r[0]))
-            print(node_text_summary(table))
-            print()
-        else:
-            print(">> skipped {}".format(r[0]))
-            print(node_text_summary(table, chars=100))
+        return analysis
