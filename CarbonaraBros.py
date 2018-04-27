@@ -43,7 +43,8 @@ if __name__ == '__main__':
     tableClassifier = Classifier('models/table_classifier.h5')
 
     for table in dom.xpath("//table"):
-        features = fe.extract(table, features_descriptor=DefaultFeatures.table)
+        features = fe.extract(table, selected = DefaultFeatures.table_selected,
+                                     features_descriptor = DefaultFeatures.table)
         r = tableClassifier.classify(features)
 
         if (r[0] >= 0.8):
