@@ -4,7 +4,7 @@
 
 ## run
 
-    python CarbonaraBros.py <url>
+    python main.py <url>
 
 ## description
 
