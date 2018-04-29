@@ -6,6 +6,10 @@
 
     python main.py <url>
 
+then:
+
+    cat result.json
+
 ## description
 
     1. **models/** contains the trained models
