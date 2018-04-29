@@ -1,5 +1,7 @@
 import DomUtils
 import DefaultFeatures
+
+from DomUtils import *
 from FeaturesExtractor import *
 from Classifier import *
 
@@ -14,7 +16,8 @@ class CarbonaraBros():
         analysis = {
             'table': {
                 'relevant': [],
-                'not_relevant': []
+#                'children_of_relevant': [],
+                'not_relevant': [],
             }
         }
 
@@ -30,4 +33,13 @@ class CarbonaraBros():
             else:
                 analysis['table']['not_relevant'].append((score, table))
 
+#        children_of_relevant = []
+#        for score, node_not_relevant in analysis['table']['not_relevant']:
+#            if child_of_any(node_not_relevant, analysis['table']['relevant']):
+#                children_of_relevant.append((score, node_not_relevant))
+#
+#        analysis['table']['not_relevant'] = [node for node in analysis['table']['not_relevant'] if node not in children_of_relevant]
+#        analysis['table']['children_of_relevant'] = children_of_relevant
+
         return analysis
+
