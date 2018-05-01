@@ -17,13 +17,22 @@ def node_text_summary(node, length=50):
     text = re.sub(r"\W+", " ", text)
     return text[:length]
 
-def node_to_key_value(node):
+def clean_node(node):
     # remove any comments, script, ...
     cleaner = lx.clean.Cleaner()
     node = cleaner.clean_html(node)
 
+    for br in node.xpath(".//br"):
+        br.tail = "\n" + br.tail if br.tail else "\n"
+    lx.etree.strip_elements(node, 'br', with_tail=False)
+
+    return node
+
+## XXX: has side-effect: translate <br> to "\n"
+def node_to_key_value(node):
     key = value = None
 
+    node = clean_node(node)
     while (key == None):
 
         children = node.getchildren()
