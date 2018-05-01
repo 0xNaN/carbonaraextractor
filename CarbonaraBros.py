@@ -30,9 +30,9 @@ class CarbonaraBros():
             features = self.fe.extract(table, selected = DefaultFeatures.table_selected,
                                               features_descriptor = DefaultFeatures.table)
             features_array = self.fe.toArray(features)
-            score = self.tableClassifier.classify(features_array)
-            score = score[0]
+            probabilities = self.tableClassifier.classify(features_array)
 
+            score = probabilities[1]
             if score >= self.relevant_threshold:
                 analysis['table']['relevant'].append((score, table))
             else:
@@ -47,8 +47,8 @@ class CarbonaraBros():
             features = self.fe.extract(list, selected = DefaultFeatures.list_selected,
                                               features_descriptor = DefaultFeatures.list)
             features_array = self.fe.toArray(features)
-            score = self.listClassifier.classify(features_array)
-            score = score[0]
+            probabilities = self.listClassifier.classify(features_array)
+            score = probabilities[1]
 
             if score >= self.relevant_threshold:
                 analysis['list']['relevant'].append((score, list))
