@@ -6,6 +6,13 @@ from CarbonaraBros import *
 
 import pandas
 
+def apply_xpaths(node, xpaths):
+    nodes = set()
+    for xpath in xpaths:
+        for node in node.xpath(xpath):
+            nodes.add(node)
+    return nodes
+
 if len(sys.argv) < 2:
     print("""
     usage:
@@ -15,22 +22,24 @@ if len(sys.argv) < 2:
 
 test_suite_path = sys.argv[1]
 test_suite = pandas.read_csv(test_suite_path, header=None, sep="\t")
+test_suite = test_suite.groupby(0)[1].apply(list)
 
 carbonara = CarbonaraBros()
 
-for _, row in test_suite.iterrows():
-    url = row[0]
-    golden_xpath = row[1]
+print("URL\t\t\tTP\tFP\tTN\tFN")
 
+for url, golden_xpaths in test_suite.iteritems():
     dom = domFromUrl(url)
-    analysis = carbonara.processDom(dom)
 
+    analysis = carbonara.processDom(dom)
     our_relevants     = set(map(lambda x: x[1], analysis['table']['relevant']))
     our_not_relevants = set(map(lambda x: x[1], analysis['table']['not_relevant']))
-    true_relevants    = set(dom.xpath(golden_xpath))
 
-    true_positive  = our_relevants.intersection(true_relevants)
+    true_relevants = apply_xpaths(dom, golden_xpaths)
 
-    print(url)
-    print("{}/{} (relevants {}/{})".format(len(true_positive), len(true_relevants),
-                                           len(our_relevants), (len(our_relevants) + len(our_not_relevants))))
+    tp = len(our_relevants.intersection(true_relevants))
+    fp = len(our_relevants.symmetric_difference(true_relevants))
+    tn = len(our_not_relevants.symmetric_difference(true_relevants))
+    fn = len(our_not_relevants.intersection(true_relevants))
+
+    print("{}\t\t\t{}\t{}\t{}\t{}".format(url, fp, fp, tn, fn))

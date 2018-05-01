@@ -11,13 +11,17 @@ class CarbonaraBros():
         self.fe = FeaturesExtractor()
         self.relevant_threshold = relevant_threshold
         self.tableClassifier =  Classifier('models/table_classifier.h5')
+        self.listClassifier =  Classifier('models/list_classifier.h5')
 
     def processDom(self, dom):
         analysis = {
             'table': {
                 'relevant': [],
-#                'children_of_relevant': [],
                 'not_relevant': [],
+            },
+            'list': {
+                'relevant': [],
+                'not_relevant': []
             }
         }
 
@@ -25,7 +29,8 @@ class CarbonaraBros():
         for table in dom.xpath("//table"):
             features = self.fe.extract(table, selected = DefaultFeatures.table_selected,
                                               features_descriptor = DefaultFeatures.table)
-            score = self.tableClassifier.classify(features)
+            features_array = self.fe.toArray(features)
+            score = self.tableClassifier.classify(features_array)
             score = score[0]
 
             if score >= self.relevant_threshold:
@@ -33,13 +38,22 @@ class CarbonaraBros():
             else:
                 analysis['table']['not_relevant'].append((score, table))
 
-#        children_of_relevant = []
-#        for score, node_not_relevant in analysis['table']['not_relevant']:
-#            if child_of_any(node_not_relevant, analysis['table']['relevant']):
-#                children_of_relevant.append((score, node_not_relevant))
-#
-#        analysis['table']['not_relevant'] = [node for node in analysis['table']['not_relevant'] if node not in children_of_relevant]
-#        analysis['table']['children_of_relevant'] = children_of_relevant
+
+        lists = dom.xpath("//ul")
+        lists = lists + dom.xpath("//ol")
+        lists = lists + dom.xpath("//dl")
+
+        for list in lists:
+            features = self.fe.extract(list, selected = DefaultFeatures.list_selected,
+                                              features_descriptor = DefaultFeatures.list)
+            features_array = self.fe.toArray(features)
+            score = self.listClassifier.classify(features_array)
+            score = score[0]
+
+            if score >= self.relevant_threshold:
+                analysis['list']['relevant'].append((score, list))
+            else:
+                analysis['list']['not_relevant'].append((score, list))
 
         return analysis
 

@@ -1,0 +1,19 @@
+amazon.com	//*[@id="feature-bullets"]/ul
+ebay.com	//*[@id="ProductDetails"]/div[1]/section/div/ul
+walmart.com	//*[starts-with(@id, "Collapsable")]/div/div/div/div/div[2]/ul
+www.amazon.fr	//*[@id="feature-bullets"]//ul
+www.amazon.in	//*[@id="feature-bullets"]//ul
+www.amazon.co.uk	//*[@id="feature-bullets"]//ul
+www.crazool.com 	//*[@id="ProductDetails"]/div[1]/section/div[2]/ul/li[1]
+www.pontofrio.com.br	//dl
+www.futureshop.ca	//*[@id="ctl00_CP_ctl00_pdpDynamicContent_dc3"]/div[2]/div/ul
+www.futureshop.ca	//*[@id="ctl00_CP_ctl00_pdpDynamicContent_dc8"]/ul
+www.gmcamera.com	//*[@id="product_addtocart_form"]/div[2]/div/div/div[3]/div[3]/div/ul
+www.rakuten.com	//*[@id="r-product-page"]/div[2]/div[1]/div/div[2]/div[1]/div//ul
+digitalcamerabug.com	//*[@id="content_text"]/ul
+www.futureshop.ca	//*[@id="ctl00_CP_ctl00_pdpDynamicContent_dc8"]/ul
+hbh-woolacotts.co.uk	//*[@id="page-wrapper"]/main/div/div[1]/div[3]//ul
+currys.co.uk	//ul[@class="productDescription"]
+www.cdw.com	//*[@id="main"]/div/div[1]/div[2]/div[2]/div[2]/div[2]/ul
+www.cdw.com	//*[@id="PO"]/div[1]/div[2]/div[1]/ul
+www.uniquephoto.com	//*[@id="main"]/div/div[1]/div[2]/div/div[1]/div[2]/div[2]//dl
