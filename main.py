@@ -5,6 +5,7 @@ import re
 import numpy as np
 
 import lxml.html as lx
+import lxml.html.clean
 
 from DomUtils import *
 from CarbonaraBros import *
@@ -16,36 +17,43 @@ def node_text_summary(node, length=50):
     text = re.sub(r"\W+", " ", text)
     return text[:length]
 
-# XXX:
-# node must have at least two children.
-# the first will be the key, the others the value
-#
-# what about
-# <tr>
-#   my key: <b> my value </b>
-# </tr>
-#
-# or
-# <tr>
-#   <b>my key:</b>  my value
-# </tr>
-# ??
 def node_to_key_value(node):
+    # remove any comments, script, ...
+    cleaner = lx.clean.Cleaner()
+    node = cleaner.clean_html(node)
+
     key = value = None
 
-    while len(node.getchildren()) == 1:
-        node = node.getchildren()[0]
+    while (key == None):
 
-    children = node.getchildren()
+        children = node.getchildren()
 
-    if len(children) == 0:
-        raise EmptyNode
+        # empty
+        if len(children) == 0:
+            raise Exception("EmptyNode")
 
-    key = children[0].text_content()
+        # <tag>key</tag>value
+        elif len(children) == 1 and children[0].tail != None and children[0].tail.strip() != "":
+            value = children[0].tail
+            key = children[0].text_content()
+
+        # key<tag>value</tag>
+        elif len(children) == 1 and node.text != None and node.text.strip() != "":
+            value = children[0].text_content()
+            key = node.text
+
+        # <wraptag>..[...]..</wraptag>
+        elif len(children) == 1:
+            node = node.getchildren()[0]
+
+        # <tag>key</tag><tag1>the</tag1><tag2>value</tag>
+        else:
+            key = children[0].text_content()
+
+            children.pop(0)
+            value = " ".join(map(lambda n: n.text_content(), children))
+
     key = re.sub(r' +', " ", key).strip()
-
-    children.pop(0)
-    value = " ".join(map(lambda n: n.text_content().strip(), children))
     value = re.sub(r' +', " ", value).strip()
 
     return (key, value)
