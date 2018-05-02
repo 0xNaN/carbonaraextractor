@@ -71,6 +71,17 @@ def node_to_key_value(node):
 
     return (key, value)
 
+def is_good_entry (key, value):
+    if len(key) == 0 or len(value) == 0:
+        return False
+
+    if len(key) >= 60:
+        return False
+
+    key = re.sub(r'[^a-zA-Z0-9]', "", key)
+
+    return not key.isnumeric()
+
 def append_key_value_to_dict(dict, key, value):
     if key not in dict:
         dict[key] = value
@@ -92,7 +103,9 @@ def analysis_to_dict(analysis):
     for tr in relevant_tr:
         try:
             key, value = node_to_key_value(tr)
-            append_key_value_to_dict(ret, key, value)
+
+            if is_good_entry(key, value):
+                append_key_value_to_dict(ret, key, value)
         except:
             print(">>>> tr skipped")
 
@@ -108,7 +121,8 @@ def analysis_to_dict(analysis):
     for li in relevant_li:
         try:
             key, value = node_to_key_value(li)
-            append_key_value_to_dict(ret, key, value)
+            if is_good_entry(key, value):
+                append_key_value_to_dict(ret, key, value)
         except:
             ret['__unstructured'].append(li.text_content().strip())
 
