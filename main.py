@@ -14,7 +14,7 @@ from FeaturesExtractor import *
 def node_text_summary(node, length=50):
     words = [n.text_content().strip() for n in node.xpath(".//*[not(*)]")]
     text = " ".join(words).strip()
-    text = re.sub(r"\W+", " ", text)
+    text = re.sub(r"\s+", " ", text)
     return text[:length]
 
 def clean_node(node):
@@ -62,8 +62,12 @@ def node_to_key_value(node):
             children.pop(0)
             value = " ".join(map(lambda n: n.text_content(), children))
 
-    key = re.sub(r' +', " ", key).strip()
-    value = re.sub(r' +', " ", value).strip()
+    # whitespace chars (\n included) -> " "
+    key = re.sub(r'\s+', " ", key).strip()
+
+    # all whitespace chars but \n -> " "
+    value = re.sub(r'[^\S\n]+', " ", value).strip()
+    value = re.sub(r'\s*\n\s*', "\n", value).strip()
 
     return (key, value)
 
@@ -72,7 +76,7 @@ def append_key_value_to_dict(dict, key, value):
         dict[key] = value
         return
 
-    if type(dict[key] != list):
+    if type(dict[key]) != list:
         dict[key] = [dict[key]]
 
     dict[key].append(value)
