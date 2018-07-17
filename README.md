@@ -39,8 +39,8 @@ for example:
 
 The standard output shows informations about every Table and List found 
 on the specified URL.  
-Every red row, is a table/list that the classifier has tagged as `unrelevant` and so skipped.  
-Every green row is a table/list that the classifier think is relevant about the trained domain 
+Every red row, is a table/list that the classifier has tagged as *unrelevant* and so skipped.  
+Every green row is a table/list that the classifier think is *relevant* about the trained domain 
 and is reported on the final `result.json`.
 
 The `result.json` file shows every information extracted.  
