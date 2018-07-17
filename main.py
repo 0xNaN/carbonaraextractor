@@ -81,7 +81,7 @@ def is_good_entry (key, value):
 
     key = re.sub(r'[^a-zA-Z0-9]', "", key)
 
-    return key.isdigit()
+    return not key.isdigit()
 
 def append_key_value_to_dict(dict, key, value):
     if key not in dict:
