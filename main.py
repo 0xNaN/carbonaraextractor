@@ -3,6 +3,7 @@ import requests
 import json
 import re
 import numpy as np
+import datetime
 
 import lxml.html as lx
 import lxml.html.clean
@@ -110,11 +111,9 @@ def analysis_to_dict(analysis):
             print(">>>> tr skipped")
 
     # list
-    # XXX: mancano i dt (che non hanno i li)
-    # bisogna anche eliminare dal dom tutto ciò che è stato processato, altrimenti
-    # si analizza più volte lo stesso contenuto?
-    # es: https://www.gearbest.com/action-cameras/pp_651543.html?wid=4
-    # <dd> che contiene <ul>
+    # XXX:
+    #   1. dt handling (they do not have <li>)
+    #   2. remove list inside list? (e.g: https://www.gearbest.com/action-cameras/pp_651543.html?wid=4
     relevant_li = [list.xpath(".//li") for _, list in analysis['list']['relevant']]
     relevant_li = set([li for list_of_li in relevant_li for li in list_of_li])
 

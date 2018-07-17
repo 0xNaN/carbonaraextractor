@@ -2,7 +2,6 @@ import nltk
 import requests
 import re
 import lxml.html as lx
-from selenium import webdriver
 
 def count_xpath(node, xpath):
     return len(node.xpath(xpath))
@@ -42,15 +41,11 @@ def child_of_any(node, nodes):
     return False
 
 def domFromUrl(url, dump_on=""):
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    driver = webdriver.Chrome(chrome_options=options)
-
-    driver.get(url)
-    source = driver.page_source
+    req = requests.get(url)
+    source = req.content
 
     if dump_on != "":
         with open(dump_on, "w") as d:
-            d.write(source)
+            d.write(str(source))
 
     return lx.fromstring(source)

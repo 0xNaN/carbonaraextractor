@@ -2,17 +2,26 @@ import statistics
 
 from DomUtils import *
 
-with open("data/camera_hot_words.txt", "r") as cf:
+with open("data/vin/camera_hot_words.txt", "r") as cf:
     CAMERA_HOT_WORDS = list(map(str.strip, cf.readlines()))
     CAMERA_HOT_WORDS = set(CAMERA_HOT_WORDS)
 
-table_selected = ['number_bold',
-                  'number_img',
-                  'number_links',
-                  'number_relevants',
-                  'number_td',
-                  'relevants_ratio',
-                  'number_tr']
+table_selected = [
+    'depth',
+    'number_bold',
+    'number_br',
+    'number_div',
+    'number_img',
+    'number_li',
+    'number_links',
+    'number_p',
+    'number_relevants',
+    'number_td',
+    'number_th',
+    'number_tr',
+    'relevants_ratio'
+]
+
 table = {
     "number_tr":        lambda node: count_xpath(node, ".//tr"),
     "number_th":        lambda node: count_xpath(node, ".//th"),
@@ -30,13 +39,19 @@ table = {
     "number_div": lambda node: count_xpath(node, ".//div"),
 }
 
-
-list_selected = ['number_bold',
-                 'number_img',
-                 'number_links',
-                 'number_relevants',
-                 'avg_tag_in_li',
-                 'relevants_ratio']
+list_selected = [
+    'avg_tag_in_li',
+    'depth',
+    'number_bold',
+    'number_br',
+    'number_div',
+    'number_img',
+    'number_links',
+    'number_p',
+    'number_relevants',
+    'number_row',
+    'relevants_ratio'
+]
 
 def avg_tag_in_li(node):
     tags = [len(li.xpath(".//*")) for li in node.xpath(".//li")]
