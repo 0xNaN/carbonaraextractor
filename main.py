@@ -81,7 +81,7 @@ def is_good_entry (key, value):
 
     key = re.sub(r'[^a-zA-Z0-9]', "", key)
 
-    return not key.isnumeric()
+    return not key.isdigit()
 
 def append_key_value_to_dict(dict, key, value):
     if key not in dict:
@@ -143,15 +143,15 @@ def with_color(msg, color="green"):
 def print_result(result, color):
     for score, node in result:
 
-        # 1° column: score
+        # 1st column: score
         score = round(score, 2)
 
-        # 2° column: text d
+        # 2nd column: text d
         summary_length = 60
         node_summary = node_text_summary(node, length=summary_length)
         node_summary = '"{}"'.format(node_summary)
 
-        # 3° column: feature vector
+        # 3rd column: feature vector
         descriptor = DefaultFeatures.table if node.tag == "table" else DefaultFeatures.list
         selected   = DefaultFeatures.table_selected if node.tag == "table" else DefaultFeatures.list_selected
         ft = FeaturesExtractor()

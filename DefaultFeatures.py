@@ -1,5 +1,5 @@
-import statistics
-
+# import statistics
+import numpy as np
 from DomUtils import *
 
 with open("data/vin/camera_hot_words.txt", "r") as cf:
@@ -57,7 +57,7 @@ def avg_tag_in_li(node):
     tags = [len(li.xpath(".//*")) for li in node.xpath(".//li")]
     if len(tags) == 0:
         return 0
-    return statistics.mean(tags)
+    return np.mean(tags)
 
 list = {
     "number_row": lambda node: count_xpath(node, ".//li") + count_xpath(node, ".//dt"),
