@@ -1,17 +1,15 @@
-import DomUtils
-import DefaultFeatures
-
-from DomUtils import *
-from FeaturesExtractor import *
-from Classifier import *
+from carbonaraextractor import DefaultFeatures
+from carbonaraextractor.DomUtils import *
+from carbonaraextractor.FeaturesExtractor import *
+from carbonaraextractor.Classifier import *
 
 class CarbonaraBros():
 
     def __init__(self, relevant_threshold = 0.8):
         self.fe = FeaturesExtractor()
         self.relevant_threshold = relevant_threshold
-        self.tableClassifier =  Classifier('models/table_classifier.h5')
-        self.listClassifier =  Classifier('models/list_classifier.h5')
+        self.tableClassifier =  Classifier('models/table_classifier.h5', 'models/table_scaler.pkl')
+        self.listClassifier =  Classifier('models/list_classifier.h5', 'models/list_scaler.pkl')
 
     def processDom(self, dom):
         analysis = {

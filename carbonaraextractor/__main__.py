@@ -8,69 +8,9 @@ import datetime
 import lxml.html as lx
 import lxml.html.clean
 
-from DomUtils import *
-from CarbonaraBros import *
-from FeaturesExtractor import *
-
-def node_text_summary(node, length=50):
-    words = [n.text_content().strip() for n in node.xpath(".//*[not(*)]")]
-    text = " ".join(words).strip()
-    text = re.sub(r"\s+", " ", text)
-    return text[:length]
-
-def clean_node(node):
-    # remove any comments, script, ...
-    cleaner = lx.clean.Cleaner()
-    node = cleaner.clean_html(node)
-
-    for br in node.xpath(".//br"):
-        br.tail = "\n" + br.tail if br.tail else "\n"
-    lx.etree.strip_elements(node, 'br', with_tail=False)
-
-    return node
-
-## XXX: has side-effect: translate <br> to "\n"
-def node_to_key_value(node):
-    key = value = None
-
-    node = clean_node(node)
-    while (key == None):
-
-        children = node.getchildren()
-
-        # empty
-        if len(children) == 0:
-            raise Exception("EmptyNode")
-
-        # <tag>key</tag>value
-        elif len(children) == 1 and children[0].tail != None and children[0].tail.strip() != "":
-            value = children[0].tail
-            key = children[0].text_content()
-
-        # key<tag>value</tag>
-        elif len(children) == 1 and node.text != None and node.text.strip() != "":
-            value = children[0].text_content()
-            key = node.text
-
-        # <wraptag>..[...]..</wraptag>
-        elif len(children) == 1:
-            node = node.getchildren()[0]
-
-        # <tag>key</tag><tag1>the</tag1><tag2>value</tag>
-        else:
-            key = children[0].text_content()
-
-            children.pop(0)
-            value = " ".join(map(lambda n: n.text_content(), children))
-
-    # whitespace chars (\n included) -> " "
-    key = re.sub(r'\s+', " ", key).strip()
-
-    # all whitespace chars but \n -> " "
-    value = re.sub(r'[^\S\n]+', " ", value).strip()
-    value = re.sub(r'\s*\n\s*', "\n", value).strip()
-
-    return (key, value)
+from carbonaraextractor.DomUtils import *
+from carbonaraextractor.CarbonaraBros import *
+from carbonaraextractor.FeaturesExtractor import *
 
 def is_good_entry (key, value):
     if len(key) == 0 or len(value) == 0:

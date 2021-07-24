@@ -1,8 +1,10 @@
-# import statistics
+import os
 import numpy as np
-from DomUtils import *
 
-with open("data/vin/camera_hot_words.txt", "r") as cf:
+from carbonaraextractor.DomUtils import *
+
+data_path = os.sep.join(__file__.split("/")[:-2] + ["data"])
+with open(os.sep.join([data_path, "and", "camera_hot_words.txt"]), "r") as cf:
     CAMERA_HOT_WORDS = list(map(str.strip, cf.readlines()))
     CAMERA_HOT_WORDS = set(CAMERA_HOT_WORDS)
 
