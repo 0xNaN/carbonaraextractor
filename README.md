@@ -2,7 +2,9 @@
 
 Product specifications extractor driven by a DOM Classifier.
 
-![](carbonaraextractor.gif)
+<p align="center">
+<img src=carbonaraextractor.gif width=600 />
+</p>
 
 _Note: this is an old PoC developed to demonstrate how tables and lists of the DOM can be classified before being extracted._
 
