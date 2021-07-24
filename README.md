@@ -1,18 +1,25 @@
-## project description
+## Carbonara Extractor :spaghetti:
 
-Product specifications extractor driven by Neural Network classifiers that exploit some domain 
-knowledge
+Product specifications extractor driven by a DOM Classifier.
+
+![](carbonaraextractor.gif)
+
+_Note: this is an old PoC developed to demonstrate how tables and lists of the DOM can be classified before being extracted._
 
 ## how to run
 
-The project is already trained on the domain "Cameras".
+To install dependencies:
 
+    python3.7 -m venv venv
+    source ./venv/bin/activate
+    pip install --upgrade pip
     pip install -r requirements.txt
-    python main.py <url>
 
-for example:
+To extract information from an URL, simple run:
 
-    > python main.py "https://www.dpreview.com/products/canon/slrs/canon_eosm50"
+    > python -m carbonaraextractor "https://www.dpreview.com/products/canon/slrs/canon_eosm50"
+    ...
+    ...
     ...
     > cat result.json
     {
@@ -37,25 +44,18 @@ for example:
     "__unstructured": []
     }
 
-The standard output shows informations about every Table and List found 
-on the specified URL.  
-Every red row, is a table/list that the classifier has tagged as *unrelevant* and so skipped.  
-Every green row is a table/list that the classifier think is *relevant* about the trained domain 
-and is reported on the final `result.json`.
-
-The `result.json` file shows every information extracted.  
-The system tries to extract <key, value> pairs and whenever it can't put the informations
-on a special key named `__unstructured`.
+The standard output shows information about every Table and List found on the specified URL with their "relevance" scores given by the classifiers.  Every red row is a table/list that the classifier has tagged as *unrelevant*.  Every green row is a table/list that the classifier think is *relevant* about the trained domain. The relevant content is then parsed as `<key, value>` pairs and reported inside the file `result.json`.  
 
 ## classifiers
 
-The project uses two simple classifiers implmented with Keras and saved on `models/`.  
+The project uses two simple classifiers trained on the "Camera" domains, implemented with Keras and saved inside `models/`.
 
-The two notebooks `list_classifier` and `table_classifier` show the process of 
-traning/testing/saving of the models.  
+The notebook `notebooks/train_classifiers` show the process of traning/testing/saving of the models. 
 
-The data on which they are trained is on `data/and/` which contains:
+The datasets used are inside the `data` folder which contains:
 
-   1. `list.csv`: features values extracted on not_relevant/relevant lists
-   2. `table.csv`: features values extracted on not_relevant/relevant tables
-   3. `camera_hot_words.txt`: 200 *stems* of relevant words about the "Cameras" domain 
+   1. `list.csv`: features values extracted for relevant/not_relevant lists. The features are extracted from a corpus of webpages not shared here.
+   2. `table.csv`: features values extracted for relevant/not_relevant tables. The features are extracted from a corpus of webpages not shared here.
+   3. `camera_hot_words.txt`: 200 *stems* of relevant words about the "Cameras" domain.
+   4.  `list_xpath_ground_truth.txt`: xpath for relevant lists for known domains.
+   5.  `table_xpath_ground_truth.txt`: xpath for relevant tables for known domains.
