@@ -15,7 +15,7 @@ lxml==4.2.3
 Markdown==2.6.11
 nltk==3.3
 numpy==1.14.5
-protobuf==3.6.1
+protobuf==3.18.3
 PyYAML==3.13
 requests==2.19.1
 scipy==1.1.0
