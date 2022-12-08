@@ -2,7 +2,7 @@ pandas==1.1.5
 sklearn==0.0
 absl-py==0.4
 astor==0.7.1
-certifi==2018.4.16
+certifi==2022.12.7
 chardet==3.0.4
 gast==0.2.0
 grpcio==1.13.0
